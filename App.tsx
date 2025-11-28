@@ -13,6 +13,7 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<'login' | 'register'>('login');
   const [regName, setRegName] = useState('');
+  const [regEmail, setRegEmail] = useState('');
 
   useEffect(() => {
     const init = async () => {
@@ -35,11 +36,15 @@ const App: React.FC = () => {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!regName.trim()) return;
+    if (!regName.trim() || !regEmail.trim()) {
+      alert('Please enter both name and email.');
+      return;
+    }
 
-    await registerUser(regName, UserRole.STUDENT);
+    await registerUser(regName, regEmail, UserRole.STUDENT);
     await refreshUsers();
     setRegName('');
+    setRegEmail('');
     setView('login');
     alert('Registration successful! Please select your name to login.');
   };
@@ -101,7 +106,10 @@ const App: React.FC = () => {
                         <div className="bg-muted group-hover:bg-white p-2 rounded-full mr-3 transition-colors">
                            <UserCircle className="w-5 h-5 text-gray-500 group-hover:text-primary" />
                         </div>
-                        <span className="font-medium">{user.name}</span>
+                        <div className="text-left">
+                          <span className="font-medium block">{user.name}</span>
+                          {user.email && <span className="text-xs text-muted-foreground">{user.email}</span>}
+                        </div>
                       </button>
                     ))}
                     {availableUsers.filter(u => u.role === UserRole.STUDENT).length === 0 && <p className="text-sm text-muted-foreground italic">No students found</p>}
@@ -123,6 +131,16 @@ const App: React.FC = () => {
                     value={regName}
                     onChange={(e) => setRegName(e.target.value)}
                     autoFocus
+                  />
+                </div>
+                <div>
+                  <Label>Email Address</Label>
+                  <Input 
+                    type="email"
+                    placeholder="e.g. john@example.com" 
+                    value={regEmail}
+                    onChange={(e) => setRegEmail(e.target.value)}
+                    required
                   />
                 </div>
                 <div className="flex gap-2 pt-2">

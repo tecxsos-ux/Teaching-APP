@@ -103,10 +103,11 @@ export const initStorage = async () => {
 export const getUsers = (): Promise<User[]> => 
   fetchData('/users', USERS_KEY, INITIAL_USERS);
 
-export const registerUser = async (name: string, role: UserRole): Promise<User> => {
+export const registerUser = async (name: string, email: string, role: UserRole): Promise<User> => {
   const newUser: User = {
     id: `u_${Date.now()}`,
     name,
+    email,
     role,
     lastLogin: new Date().toISOString()
   };

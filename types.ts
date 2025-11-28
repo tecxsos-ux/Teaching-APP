@@ -1,3 +1,4 @@
+
 export enum UserRole {
   TEACHER = 'TEACHER',
   STUDENT = 'STUDENT'
@@ -6,6 +7,7 @@ export enum UserRole {
 export interface User {
   id: string;
   name: string;
+  email?: string;
   role: UserRole;
   lastLogin?: string;
 }
